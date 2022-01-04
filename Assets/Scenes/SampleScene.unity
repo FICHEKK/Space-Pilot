@@ -5226,7 +5226,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapSettings: {fileID: 11400000, guid: 2650089ec1dd62b48ba5b89d871f7040, type: 2}
   forwardSpeed: 100
-  animationTickCount: 30
+  animationTickCount: 50
+  animationRotation: 30
 --- !u!54 &1128390164
 Rigidbody:
   m_ObjectHideFlags: 0

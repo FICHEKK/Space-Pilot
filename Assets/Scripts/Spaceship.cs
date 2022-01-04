@@ -6,6 +6,7 @@ public class Spaceship : MonoBehaviour
     [SerializeField] private MapSettings mapSettings;
     [SerializeField] private float forwardSpeed = 100f;
     [SerializeField] private int animationTickCount = 50;
+    [SerializeField] private float animationRotation = 30;
     private int _currentLaneIndex;
     private bool _isMovingToAnotherLane;
 
@@ -19,11 +20,11 @@ public class Spaceship : MonoBehaviour
     {
         if (_isMovingToAnotherLane) return;
 
-        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             StartCoroutine(MoveToLane(_currentLaneIndex - 1));
         }
-        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             StartCoroutine(MoveToLane(_currentLaneIndex + 1));
         }
@@ -37,12 +38,18 @@ public class Spaceship : MonoBehaviour
         var startPositionX = transform.position.x;
         var endPositionX = laneIndex * mapSettings.laneWidth;
 
+        var middleRotation = laneIndex < _currentLaneIndex ? animationRotation : -animationRotation;
+
         for (var i = 0; i < animationTickCount; i++)
         {
-            var percentage = EaseIntOutQuad((float) i / animationTickCount);
+            var percentage = (float) i / animationTickCount;
+
+            transform.eulerAngles = percentage < 0.5f
+                ? new Vector3(0, 0, Mathf.Lerp(0, middleRotation, EaseIntOutQuad(percentage / 0.5f)))
+                : new Vector3(0, 0, Mathf.Lerp(middleRotation, 0, EaseIntOutQuad((percentage - 0.5f) / 0.5f)));
 
             var currentPosition = transform.position;
-            currentPosition.x = Mathf.Lerp(startPositionX, endPositionX, percentage);
+            currentPosition.x = Mathf.Lerp(startPositionX, endPositionX, EaseIntOutQuad(percentage));
             transform.position = currentPosition;
 
             yield return null;
