@@ -158,6 +158,37 @@ MonoBehaviour:
   distanceBetweenAsteroidFronts: 100
   initialAsteroidFrontCount: 20
   startAsteroidFrontIndex: 3
+  asteroidPrefabs:
+  - wholePrefab: {fileID: 7437889339238721774, guid: a028a9caf7ccf2443a238296ded73a04, type: 3}
+    fracturedPrefab: {fileID: 7273956540791742907, guid: 9cb5e7465eef1af4988889e41a071493, type: 3}
+  - wholePrefab: {fileID: 2746130058158584518, guid: 41059c7f21dd4994d9797364e07a3d45, type: 3}
+    fracturedPrefab: {fileID: 6516070941938034013, guid: 8a0d737915eae7a4e8c4176987503064, type: 3}
+  - wholePrefab: {fileID: 1797448692007430590, guid: 579e809d2465e864795196e5b0545d73, type: 3}
+    fracturedPrefab: {fileID: 523533613071711390, guid: 0ebf9f1968066d74e9a9f74696085d52, type: 3}
+  - wholePrefab: {fileID: 5088785953716078452, guid: b31bb4b021ef65f4fbaf7f2d7e56f967, type: 3}
+    fracturedPrefab: {fileID: 3838665524093264010, guid: 9b4e5fd1d3dc2424fb4276ce71f932ab, type: 3}
+  - wholePrefab: {fileID: 1630719386496763137, guid: 1b25ec5b3aa236f49bb4e00c0b8a5efe, type: 3}
+    fracturedPrefab: {fileID: 1145542162625858076, guid: 3c8215a2e7ab319429b4a5a281da827e, type: 3}
+  - wholePrefab: {fileID: 5194881690107128898, guid: a7650c1ce3d21654ebf92d7ebf494bfc, type: 3}
+    fracturedPrefab: {fileID: 5850001623458330267, guid: a024271adb4d00a43904106a318d260c, type: 3}
+  - wholePrefab: {fileID: 2491964224651406481, guid: 2da3e069c77e294469e5af0fe430dabf, type: 3}
+    fracturedPrefab: {fileID: 1342456525053472956, guid: 3411c56d2afd5af4a8df22b06f9551e3, type: 3}
+  - wholePrefab: {fileID: 5252957863175906491, guid: 52e5665ed874ab649afee8d6df0ab38e, type: 3}
+    fracturedPrefab: {fileID: 4431163409800634606, guid: 0ff42f37aee0fec44bcd79763ae4f92f, type: 3}
+  - wholePrefab: {fileID: 3291891354613854917, guid: 3054692602d6b2c418a430defcc5dca4, type: 3}
+    fracturedPrefab: {fileID: 7139729654043156525, guid: c03bd4a9c21eff74a8771f8e0d70e711, type: 3}
+  - wholePrefab: {fileID: 6549293077901927804, guid: 8312a98dccd9dba4ab86a80fa392cfa8, type: 3}
+    fracturedPrefab: {fileID: 8045309804241059600, guid: a680ad859bd92a345b6ae6b11c6a4301, type: 3}
+  - wholePrefab: {fileID: 2078176198351759274, guid: af2725044a76460448d036210c096953, type: 3}
+    fracturedPrefab: {fileID: 6659000685879201544, guid: 858bcc836e2a98d44ab962addfd772ff, type: 3}
+  - wholePrefab: {fileID: 1433142016259526838, guid: 73da260fe05fc414da1dbbca90d3030c, type: 3}
+    fracturedPrefab: {fileID: 4737196167981967199, guid: 16165ff48390af44f993e05c19bac115, type: 3}
+  - wholePrefab: {fileID: 3606340279829517473, guid: 46e7653dfbf77b247bc855c46bbd4f4e, type: 3}
+    fracturedPrefab: {fileID: 3227188554907173655, guid: b66485824d4da074ca57921ca152d924, type: 3}
+  - wholePrefab: {fileID: 7642089964585371861, guid: ec4c29675987e87429aeec5e4e93fc5f, type: 3}
+    fracturedPrefab: {fileID: 1237976945563109718, guid: a833525238ff43641adecba6d1e74821, type: 3}
+  - wholePrefab: {fileID: 2194794745080136896, guid: c0e82ab38938b0a4ab35f65d8981ac0f, type: 3}
+    fracturedPrefab: {fileID: 8842431829488770805, guid: 0df7f3e030f1da24a9abe74e81197585, type: 3}
 --- !u!4 &257550098
 Transform:
   m_ObjectHideFlags: 0

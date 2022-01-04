@@ -1,14 +1,16 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class AsteroidSpawner : MonoBehaviour
 {
     [SerializeField] private MapSettings mapSettings;
-    [SerializeField] private GameObject asteroidPrefab;
     [SerializeField] private Transform spaceship;
     [SerializeField] private float distanceBetweenAsteroidFronts;
     [SerializeField] private int initialAsteroidFrontCount;
     [SerializeField] private int startAsteroidFrontIndex;
+    [SerializeField] private List<AsteroidPrefab> asteroidPrefabs;
 
     private void Start() => SpawnInitialAsteroidFronts();
 
@@ -21,7 +23,8 @@ public class AsteroidSpawner : MonoBehaviour
             foreach (var laneIndex in GetRandomLaneIndices(asteroidCount))
             {
                 var position = new Vector3(laneIndex * mapSettings.laneWidth, 0, distanceBetweenAsteroidFronts * i);
-                var asteroid = Instantiate(asteroidPrefab, position, Quaternion.identity);
+                var asteroid = Instantiate(asteroidPrefabs[Random.Range(0, asteroidPrefabs.Count)].wholePrefab, position, Quaternion.identity);
+                asteroid.transform.localScale = new Vector3(Random.Range(2, 3f), Random.Range(2, 3f), Random.Range(2, 3f));
             }
         }
     }
@@ -53,5 +56,12 @@ public class AsteroidSpawner : MonoBehaviour
             array[j] = array[i];
             array[i] = value;
         }
+    }
+
+    [Serializable]
+    public struct AsteroidPrefab
+    {
+        public GameObject wholePrefab;
+        public GameObject fracturedPrefab;
     }
 }
