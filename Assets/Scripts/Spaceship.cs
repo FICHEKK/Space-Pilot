@@ -64,16 +64,9 @@ public class Spaceship : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Entered asteroid!");
-    }
+        var asteroid = other.gameObject.GetComponent<Asteroid>();
+        if (asteroid == null) return;
 
-    private void OnCollisionStay(Collision other)
-    {
-        Debug.Log("Stayin.");
-    }
-
-    private void OnCollisionExit(Collision other)
-    {
-        Debug.Log("Out!");
+        asteroid.Break();
     }
 }
