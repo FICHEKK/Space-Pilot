@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AsteroidSpawner : MonoBehaviour
@@ -15,9 +16,42 @@ public class AsteroidSpawner : MonoBehaviour
     {
         for (var i = startAsteroidFrontIndex; i < startAsteroidFrontIndex + initialAsteroidFrontCount; i++)
         {
-            var laneIndex = Random.Range(0, mapSettings.laneCount);
-            var position = new Vector3(laneIndex * mapSettings.laneWidth, 0, distanceBetweenAsteroidFronts * i);
-            var asteroid = Instantiate(asteroidPrefab, position, Quaternion.identity);
+            var asteroidCount = Random.Range(0, mapSettings.laneCount);
+
+            foreach (var laneIndex in GetRandomLaneIndices(asteroidCount))
+            {
+                var position = new Vector3(laneIndex * mapSettings.laneWidth, 0, distanceBetweenAsteroidFronts * i);
+                var asteroid = Instantiate(asteroidPrefab, position, Quaternion.identity);
+            }
+        }
+    }
+
+    private IEnumerable<int> GetRandomLaneIndices(int laneCount)
+    {
+        var laneIndices = new int[mapSettings.laneCount];
+
+        for (var i = 0; i < mapSettings.laneCount; i++)
+        {
+            laneIndices[i] = i;
+        }
+
+        Shuffle(laneIndices);
+
+        for (var i = 0; i < laneCount; i++)
+        {
+            yield return laneIndices[i];
+        }
+    }
+
+    private static void Shuffle<T>(T[] array)
+    {
+        for (var i = 0; i < array.Length - 1; i++)
+        {
+            var j = Random.Range(i, array.Length);
+
+            var value = array[j];
+            array[j] = array[i];
+            array[i] = value;
         }
     }
 }
