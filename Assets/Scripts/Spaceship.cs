@@ -27,6 +27,9 @@ public class Spaceship : MonoBehaviour
     private void Awake()
     {
         Health = maxHealth;
+
+        _currentLaneIndex = mapSettings.laneCount / 2;
+        transform.position = new Vector3(_currentLaneIndex * mapSettings.laneWidth, 0, 0);
     }
 
     private void Update()
