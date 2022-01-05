@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UserInterfaceManager : MonoBehaviour
@@ -8,6 +9,8 @@ public class UserInterfaceManager : MonoBehaviour
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Canvas deathCanvas;
     [SerializeField] private TMP_Text deathText;
+    [SerializeField] private Button flyAgainButton;
+    [SerializeField] private string flyAgainSceneToLoad;
 
     private void Awake()
     {
@@ -16,10 +19,13 @@ public class UserInterfaceManager : MonoBehaviour
         deathCanvas.enabled = false;
 
         spaceship.OnHealthChanged += () => healthSlider.value = spaceship.Health;
+
         spaceship.OnDeath += () =>
         {
-            deathText.text = $"Score: {spaceship.transform.position.z}";
+            deathText.text = $"Score: {spaceship.transform.position.z:F0}";
             deathCanvas.enabled = true;
         };
+
+        flyAgainButton.onClick.AddListener(() => SceneManager.LoadScene(flyAgainSceneToLoad));
     }
 }
