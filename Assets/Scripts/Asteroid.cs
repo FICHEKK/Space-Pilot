@@ -7,12 +7,27 @@ public class Asteroid : MonoBehaviour
     private const float AsteroidShardLifeDuration = 3;
 
     [SerializeField] private GameObject fracturedPrefab;
+    private MeshRenderer _meshRenderer;
     private Vector3 _rotationAxis;
     private float _rotationSpeed;
-    private float _damageTaken;
+
+    public float DamageTaken { get; private set; }
+
+    public float Volume
+    {
+        get
+        {
+            var bounds = _meshRenderer.bounds;
+            var dx = Mathf.Abs(bounds.min.x - bounds.max.x);
+            var dy = Mathf.Abs(bounds.min.y - bounds.max.y);
+            var dz = Mathf.Abs(bounds.min.z - bounds.max.z);
+            return dx * dy * dz;
+        }
+    }
 
     private void Awake()
     {
+        _meshRenderer = GetComponent<MeshRenderer>();
         _rotationAxis = Random.onUnitSphere;
         _rotationSpeed = 2 * Random.value - 1;
     }
@@ -24,15 +39,8 @@ public class Asteroid : MonoBehaviour
 
     public void Damage(float amount)
     {
-        _damageTaken += amount;
-
-        var bounds = GetComponent<MeshRenderer>().bounds;
-        var dx = Mathf.Abs(bounds.min.x - bounds.max.x);
-        var dy = Mathf.Abs(bounds.min.y - bounds.max.y);
-        var dz = Mathf.Abs(bounds.min.z - bounds.max.z);
-        var volume = dx * dy * dz;
-
-        if (_damageTaken >= volume) Break();
+        DamageTaken += amount;
+        if (DamageTaken >= Volume) Break();
     }
 
     public void Break()

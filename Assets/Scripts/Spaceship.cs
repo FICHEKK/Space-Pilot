@@ -25,6 +25,9 @@ public class Spaceship : MonoBehaviour
     [SerializeField] private int animationTickCount = 50;
     [SerializeField] private float animationRotation = 30;
 
+    [Header("Sounds")]
+    [SerializeField] private AudioSource laserAudioSource;
+
     private int _currentLaneIndex;
     private bool _isMovingToAnotherLane;
     private float _lastTimeLaserWasShot;
@@ -61,6 +64,8 @@ public class Spaceship : MonoBehaviour
 
         if (Energy > 0 && Input.GetKey(KeyCode.Space))
         {
+            if (!laserAudioSource.isPlaying) laserAudioSource.Play();
+
             if (Physics.Raycast(laserOrigin.position, Vector3.forward, out var hit, float.PositiveInfinity, laserRaycastLayerMask))
             {
                 laserHitParticleSystem.SetActive(true);
@@ -91,6 +96,8 @@ public class Spaceship : MonoBehaviour
         }
         else
         {
+            if (laserAudioSource.isPlaying) laserAudioSource.Stop();
+
             laserHitParticleSystem.SetActive(false);
             laserRenderer.SetPosition(1, laserOrigin.position);
 
@@ -155,13 +162,7 @@ public class Spaceship : MonoBehaviour
 
         asteroid.Break();
 
-        var bounds = other.gameObject.GetComponent<MeshRenderer>().bounds;
-        var dx = Mathf.Abs(bounds.min.x - bounds.max.x);
-        var dy = Mathf.Abs(bounds.min.y - bounds.max.y);
-        var dz = Mathf.Abs(bounds.min.z - bounds.max.z);
-        var asteroidVolume = dx * dy * dz;
-
-        Health -= asteroidVolume;
+        Health -= asteroid.Volume - asteroid.DamageTaken;
         OnHealthChanged?.Invoke();
 
         if (Health <= 0)
