@@ -5,6 +5,9 @@ using UnityEngine;
 public class Spaceship : MonoBehaviour
 {
     [SerializeField] private MapSettings mapSettings;
+    [SerializeField] private LineRenderer laserRenderer;
+    [SerializeField] private Transform laserOrigin;
+    [SerializeField] private GameObject laserHitParticleSystem;
 
     [Header("Spaceship settings")]
     [SerializeField] private float forwardSpeed = 100;
@@ -37,6 +40,36 @@ public class Spaceship : MonoBehaviour
         var speedMultiplier = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) ? turboSpeedMultiplier : 1;
         transform.Translate(0, 0, forwardSpeed * speedMultiplier * Time.deltaTime);
         MoveSidewaysIfNeeded();
+    }
+
+    private void LateUpdate()
+    {
+        HandleLaser();
+    }
+
+    private void HandleLaser()
+    {
+        laserRenderer.SetPosition(0, laserOrigin.position);
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if (Physics.Raycast(laserOrigin.position, Vector3.forward, out var hit))
+            {
+                laserHitParticleSystem.SetActive(true);
+                laserHitParticleSystem.transform.position = hit.point;
+                laserRenderer.SetPosition(1, hit.point);
+            }
+            else
+            {
+                laserHitParticleSystem.SetActive(false);
+                laserRenderer.SetPosition(1, laserOrigin.position + Vector3.forward * 10000);
+            }
+        }
+        else
+        {
+            laserHitParticleSystem.SetActive(false);
+            laserRenderer.SetPosition(1, laserOrigin.position);
+        }
     }
 
     private void MoveSidewaysIfNeeded()
