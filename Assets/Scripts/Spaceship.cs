@@ -98,6 +98,10 @@ public class Spaceship : MonoBehaviour
         Health -= asteroidVolume;
         OnHealthChanged?.Invoke();
 
-        if (Health <= 0) OnDeath?.Invoke();
+        if (Health <= 0)
+        {
+            OnDeath?.Invoke();
+            Destroy(gameObject);
+        }
     }
 }
