@@ -110,3 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fracturedPrefab: {fileID: 523533613071711390, guid: 0ebf9f1968066d74e9a9f74696085d52, type: 3}
+  breakSounds:
+  - {fileID: 8300000, guid: 4a595395ec0e87b438f1a3e97aae5714, type: 3}
+  - {fileID: 8300000, guid: fa8be5469e503ff458e34b55247a0736, type: 3}
+  - {fileID: 8300000, guid: a818ec2d1dc089045b95124b96616973, type: 3}

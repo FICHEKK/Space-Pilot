@@ -7,6 +7,8 @@ public class Asteroid : MonoBehaviour
     private const float AsteroidShardLifeDuration = 3;
 
     [SerializeField] private GameObject fracturedPrefab;
+    [SerializeField] private AudioClip[] breakSounds;
+
     private MeshRenderer _meshRenderer;
     private Vector3 _rotationAxis;
     private float _rotationSpeed;
@@ -53,7 +55,17 @@ public class Asteroid : MonoBehaviour
             child.GetComponent<Rigidbody>().AddForce(Random.onUnitSphere * AsteroidShardForceMultiplier, ForceMode.Impulse);
         }
 
+        PlayBreakSound();
         Destroy(gameObject);
         Destroy(fractured, AsteroidShardLifeDuration);
+    }
+
+    private void PlayBreakSound()
+    {
+        var asteroidBreakEmitter = new GameObject("Asteroid Break Emitter");
+        var audioSource = asteroidBreakEmitter.AddComponent<AudioSource>();
+        var breakSound = breakSounds[Random.Range(0, breakSounds.Length)];
+        audioSource.PlayOneShot(breakSound);
+        Destroy(asteroidBreakEmitter, breakSound.length);
     }
 }
