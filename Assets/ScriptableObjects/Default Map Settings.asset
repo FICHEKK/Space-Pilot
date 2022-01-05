@@ -14,3 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laneCount: 5
   laneWidth: 20
+  frontCount: 20
+  firstFrontDistanceFromOrigin: 400
+  minDistanceBetweenFronts: 75
+  maxDistanceBetweenFronts: 125
+  minAsteroidCountPerFront: 2
+  maxAsteroidCountPerFront: 4
+  minAsteroidScale: {x: 2, y: 2, z: 2}
+  maxAsteroidScale: {x: 4, y: 4, z: 4}
