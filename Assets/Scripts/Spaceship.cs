@@ -14,21 +14,34 @@ public class Spaceship : MonoBehaviour
     [SerializeField] private float turboSpeedMultiplier = 3;
     [SerializeField] private float maxHealth = 10000;
 
+    [Header("Laser settings")]
+    [SerializeField] private float laserEnergyConsumptionPerSecond = 20;
+    [SerializeField] private float laserDamagePerSecond = 500;
+    [SerializeField] private float maxEnergy = 100;
+    [SerializeField] private float timeRequiredToStartRecharging = 2;
+    [SerializeField] private LayerMask laserRaycastLayerMask;
+
     [Header("Animation settings")]
     [SerializeField] private int animationTickCount = 50;
     [SerializeField] private float animationRotation = 30;
 
     private int _currentLaneIndex;
     private bool _isMovingToAnotherLane;
+    private float _lastTimeLaserWasShot;
 
+    public event Action OnEnergyChanged;
     public event Action OnHealthChanged;
     public event Action OnDeath;
+
+    public float Energy { get; private set; }
+    public float MaxEnergy => maxEnergy;
 
     public float Health { get; private set; }
     public float MaxHealth => maxHealth;
 
     private void Awake()
     {
+        Energy = maxEnergy;
         Health = maxHealth;
 
         _currentLaneIndex = mapSettings.laneCount / 2;
@@ -44,31 +57,48 @@ public class Spaceship : MonoBehaviour
 
     private void LateUpdate()
     {
-        HandleLaser();
-    }
-
-    private void HandleLaser()
-    {
         laserRenderer.SetPosition(0, laserOrigin.position);
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Energy > 0 && Input.GetKey(KeyCode.Space))
         {
-            if (Physics.Raycast(laserOrigin.position, Vector3.forward, out var hit))
+            if (Physics.Raycast(laserOrigin.position, Vector3.forward, out var hit, float.PositiveInfinity, laserRaycastLayerMask))
             {
                 laserHitParticleSystem.SetActive(true);
                 laserHitParticleSystem.transform.position = hit.point;
                 laserRenderer.SetPosition(1, hit.point);
+
+                var asteroid = hit.transform.GetComponent<Asteroid>();
+
+                if (asteroid != null)
+                {
+                    asteroid.Damage(laserDamagePerSecond * Time.deltaTime);
+                }
+                else
+                {
+                    Debug.Log($"We hit {hit.transform.name}");
+                }
             }
             else
             {
                 laserHitParticleSystem.SetActive(false);
                 laserRenderer.SetPosition(1, laserOrigin.position + Vector3.forward * 10000);
             }
+
+            Energy = Mathf.Max(Energy - laserEnergyConsumptionPerSecond * Time.deltaTime, 0);
+            OnEnergyChanged?.Invoke();
+
+            _lastTimeLaserWasShot = Time.time;
         }
         else
         {
             laserHitParticleSystem.SetActive(false);
             laserRenderer.SetPosition(1, laserOrigin.position);
+
+            if (Time.time - _lastTimeLaserWasShot >= timeRequiredToStartRecharging)
+            {
+                Energy = Mathf.Min(Energy + laserEnergyConsumptionPerSecond * Time.deltaTime, MaxEnergy);
+                OnEnergyChanged?.Invoke();
+            }
         }
     }
 

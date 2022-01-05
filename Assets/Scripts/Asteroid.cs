@@ -9,6 +9,7 @@ public class Asteroid : MonoBehaviour
     [SerializeField] private GameObject fracturedPrefab;
     private Vector3 _rotationAxis;
     private float _rotationSpeed;
+    private float _damageTaken;
 
     private void Awake()
     {
@@ -19,6 +20,19 @@ public class Asteroid : MonoBehaviour
     private void Update()
     {
         transform.Rotate(_rotationAxis, _rotationSpeed);
+    }
+
+    public void Damage(float amount)
+    {
+        _damageTaken += amount;
+
+        var bounds = GetComponent<MeshRenderer>().bounds;
+        var dx = Mathf.Abs(bounds.min.x - bounds.max.x);
+        var dy = Mathf.Abs(bounds.min.y - bounds.max.y);
+        var dz = Mathf.Abs(bounds.min.z - bounds.max.z);
+        var volume = dx * dy * dz;
+
+        if (_damageTaken >= volume) Break();
     }
 
     public void Break()

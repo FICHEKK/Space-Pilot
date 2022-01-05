@@ -24,7 +24,7 @@ public class AsteroidSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (spaceship == null ||_fronts.transform.childCount == 0) return;
+        if (spaceship == null || _fronts.transform.childCount == 0) return;
 
         var firstFront = _fronts.transform.GetChild(0);
         if (spaceship.position.z < firstFront.position.z) return;
