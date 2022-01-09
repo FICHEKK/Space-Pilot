@@ -6243,18 +6243,24 @@ MonoBehaviour:
   laserOrigin: {fileID: 1701104768}
   laserHitParticleSystem: {fileID: 6347373690564631390}
   forwardSpeed: 150
-  turboSpeedMultiplier: 1.5
   maxHealth: 10000
+  slowDownSpeedMultiplier: 0.5
+  slowDownEnergyConsumptionPerSecond: 30
+  timeRequiredToStartRechargingEnergy: 2.5
+  energyRechargePerSecond: 25
   laserEnergyConsumptionPerSecond: 20
   laserDamagePerSecond: 2000
   maxEnergy: 100
-  timeRequiredToStartRecharging: 2
   laserRaycastLayerMask:
     serializedVersion: 2
     m_Bits: 64
   animationTickCount: 30
   animationRotation: 30
   laserAudioSource: {fileID: 1701104770}
+  laserShootKey: 32
+  moveLeftKey: 97
+  slowDownKey: 115
+  moveRightKey: 100
 --- !u!54 &1128390164
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -11,14 +11,16 @@ public class Spaceship : MonoBehaviour
 
     [Header("Spaceship settings")]
     [SerializeField] private float forwardSpeed = 100;
-    [SerializeField] private float turboSpeedMultiplier = 3;
     [SerializeField] private float maxHealth = 10000;
+    [SerializeField] private float slowDownSpeedMultiplier = 0.5f;
+    [SerializeField] private float slowDownEnergyConsumptionPerSecond = 30;
+    [SerializeField] private float timeRequiredToStartRechargingEnergy = 2;
+    [SerializeField] private float energyRechargePerSecond = 10;
 
     [Header("Laser settings")]
     [SerializeField] private float laserEnergyConsumptionPerSecond = 20;
     [SerializeField] private float laserDamagePerSecond = 500;
     [SerializeField] private float maxEnergy = 100;
-    [SerializeField] private float timeRequiredToStartRecharging = 2;
     [SerializeField] private LayerMask laserRaycastLayerMask;
 
     [Header("Animation settings")]
@@ -28,9 +30,15 @@ public class Spaceship : MonoBehaviour
     [Header("Sounds")]
     [SerializeField] private AudioSource laserAudioSource;
 
+    [Header("Key bindings")]
+    [SerializeField] private KeyCode laserShootKey = KeyCode.W;
+    [SerializeField] private KeyCode moveLeftKey = KeyCode.A;
+    [SerializeField] private KeyCode slowDownKey = KeyCode.S;
+    [SerializeField] private KeyCode moveRightKey = KeyCode.D;
+
     private int _currentLaneIndex;
     private bool _isMovingToAnotherLane;
-    private float _lastTimeLaserWasShot;
+    private float _lastTimeEnergyWasConsumed;
 
     public event Action OnEnergyChanged;
     public event Action OnHealthChanged;
@@ -53,71 +61,32 @@ public class Spaceship : MonoBehaviour
 
     private void Update()
     {
-        var speedMultiplier = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) ? turboSpeedMultiplier : 1;
-        transform.Translate(0, 0, forwardSpeed * speedMultiplier * Time.deltaTime);
+        MoveForward();
         MoveSidewaysIfNeeded();
     }
 
-    private void LateUpdate()
+    private void MoveForward()
     {
-        laserRenderer.SetPosition(0, laserOrigin.position);
+        var speedMultiplier = 1f;
 
-        if (Energy > 0 && Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(slowDownKey) && Energy > 0)
         {
-            if (!laserAudioSource.isPlaying) laserAudioSource.Play();
-
-            if (Physics.Raycast(laserOrigin.position, Vector3.forward, out var hit, float.PositiveInfinity, laserRaycastLayerMask))
-            {
-                laserHitParticleSystem.SetActive(true);
-                laserHitParticleSystem.transform.position = hit.point;
-                laserRenderer.SetPosition(1, hit.point);
-
-                var asteroid = hit.transform.GetComponent<Asteroid>();
-
-                if (asteroid != null)
-                {
-                    asteroid.Damage(laserDamagePerSecond * Time.deltaTime);
-                }
-                else
-                {
-                    Debug.Log($"We hit {hit.transform.name}");
-                }
-            }
-            else
-            {
-                laserHitParticleSystem.SetActive(false);
-                laserRenderer.SetPosition(1, laserOrigin.position + Vector3.forward * 10000);
-            }
-
-            Energy = Mathf.Max(Energy - laserEnergyConsumptionPerSecond * Time.deltaTime, 0);
-            OnEnergyChanged?.Invoke();
-
-            _lastTimeLaserWasShot = Time.time;
+            speedMultiplier = slowDownSpeedMultiplier;
+            ConsumeEnergy(slowDownEnergyConsumptionPerSecond);
         }
-        else
-        {
-            if (laserAudioSource.isPlaying) laserAudioSource.Stop();
 
-            laserHitParticleSystem.SetActive(false);
-            laserRenderer.SetPosition(1, laserOrigin.position);
-
-            if (Time.time - _lastTimeLaserWasShot >= timeRequiredToStartRecharging)
-            {
-                Energy = Mathf.Min(Energy + laserEnergyConsumptionPerSecond * Time.deltaTime, MaxEnergy);
-                OnEnergyChanged?.Invoke();
-            }
-        }
+        transform.Translate(0, 0, forwardSpeed * speedMultiplier * Time.deltaTime);
     }
 
     private void MoveSidewaysIfNeeded()
     {
         if (_isMovingToAnotherLane) return;
 
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(moveLeftKey))
         {
             StartCoroutine(MoveToLane(_currentLaneIndex - 1));
         }
-        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(moveRightKey))
         {
             StartCoroutine(MoveToLane(_currentLaneIndex + 1));
         }
@@ -153,6 +122,56 @@ public class Spaceship : MonoBehaviour
 
         static float EaseIntOutQuad(float t) =>
             t < 0.5f ? 2 * t * t : 1 - Mathf.Pow(-2 * t + 2, 2) / 2;
+    }
+
+    private void LateUpdate()
+    {
+        ShootLaserIfRequested();
+        RechargeEnergyIfPossible();
+    }
+
+    private void ShootLaserIfRequested()
+    {
+        var isShootingLaser = Input.GetKey(laserShootKey) && Energy > 0;
+        laserHitParticleSystem.SetActive(isShootingLaser);
+        laserRenderer.SetPosition(0, laserOrigin.position);
+
+        if (!isShootingLaser)
+        {
+            laserRenderer.SetPosition(1, laserOrigin.position);
+            laserAudioSource.Stop();
+            return;
+        }
+
+        if (!laserAudioSource.isPlaying) laserAudioSource.Play();
+        ConsumeEnergy(laserEnergyConsumptionPerSecond);
+
+        var laserDidHit = Physics.Raycast(laserOrigin.position, Vector3.forward, out var hit, float.PositiveInfinity, laserRaycastLayerMask);
+        var laserHitPosition = laserDidHit ? hit.point : laserOrigin.position + Vector3.forward * 10000;
+
+        laserHitParticleSystem.transform.position = laserHitPosition;
+        laserRenderer.SetPosition(1, laserHitPosition);
+
+        if (!laserDidHit) return;
+
+        var asteroid = hit.transform.GetComponent<Asteroid>();
+        if (asteroid != null) asteroid.Damage(laserDamagePerSecond * Time.deltaTime);
+    }
+
+    private void RechargeEnergyIfPossible()
+    {
+        var elapsedTimeSinceLastEnergyConsumption = Time.time - _lastTimeEnergyWasConsumed;
+        if (elapsedTimeSinceLastEnergyConsumption < timeRequiredToStartRechargingEnergy) return;
+
+        Energy = Mathf.Min(Energy + energyRechargePerSecond * Time.deltaTime, MaxEnergy);
+        OnEnergyChanged?.Invoke();
+    }
+
+    private void ConsumeEnergy(float consumptionPerSecond)
+    {
+        _lastTimeEnergyWasConsumed = Time.time;
+        Energy = Mathf.Max(Energy - consumptionPerSecond * Time.deltaTime, 0);
+        OnEnergyChanged?.Invoke();
     }
 
     private void OnCollisionEnter(Collision other)
