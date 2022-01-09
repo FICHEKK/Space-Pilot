@@ -51,13 +51,13 @@ public class UserInterfaceManager : MonoBehaviour
         {
             gameplayCanvas.enabled = false;
             deathCanvas.enabled = true;
-            deathText.text = $"You flew {spaceship.transform.position.z:F0} meters in deep space!";
+            deathText.text = $"You flew {(int) spaceship.transform.position.z} meters in deep space!";
         };
     }
 
     private void Update()
     {
         if (spaceship == null) return;
-        scoreText.text = $"{spaceship.transform.position.z:F0}m";
+        scoreText.text = $"{(int) spaceship.transform.position.z}m";
     }
 }
