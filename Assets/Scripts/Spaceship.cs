@@ -27,8 +27,9 @@ public class Spaceship : MonoBehaviour
     [SerializeField] private int animationTickCount = 50;
     [SerializeField] private float animationRotation = 30;
 
-    [Header("Sounds")]
+    [Header("Audio settings")]
     [SerializeField] private AudioSource laserAudioSource;
+    [SerializeField] private AudioSource laneChangeAudioSource;
 
     [Header("Key bindings")]
     [SerializeField] private KeyCode laserShootKey = KeyCode.W;
@@ -95,6 +96,8 @@ public class Spaceship : MonoBehaviour
     private IEnumerator MoveToLane(int laneIndex)
     {
         if (laneIndex < 0 || laneIndex >= mapSettings.laneCount) yield break;
+
+        laneChangeAudioSource.Play();
 
         _isMovingToAnotherLane = true;
         var startPositionX = transform.position.x;
