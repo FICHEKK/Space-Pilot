@@ -12,6 +12,7 @@ public class Spaceship : MonoBehaviour
 
     [Header("Spaceship settings")]
     [SerializeField] private float forwardSpeed = 100;
+    [SerializeField] private float acceleration = 1;
     [SerializeField] private float maxHealth = 10000;
     [SerializeField] private float slowDownSpeedMultiplier = 0.5f;
     [SerializeField] private float slowDownEnergyConsumptionPerSecond = 30;
@@ -85,7 +86,9 @@ public class Spaceship : MonoBehaviour
         var mainModule = exhaustOutletParticleSystem.main;
         mainModule.startLifetime = new ParticleSystem.MinMaxCurve(constant: startLifetime);
         exhaustOutletAudioSource.volume = volume;
+
         transform.Translate(0, 0, forwardSpeed * speedMultiplier * Time.deltaTime);
+        forwardSpeed += acceleration * Time.deltaTime;
     }
 
     private void MoveSidewaysIfNeeded()

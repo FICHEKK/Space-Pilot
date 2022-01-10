@@ -6727,6 +6727,7 @@ MonoBehaviour:
   laserHitParticleSystem: {fileID: 6347373690564631390}
   exhaustOutletParticleSystem: {fileID: 1114460789}
   forwardSpeed: 150
+  acceleration: 0.25
   maxHealth: 10000
   slowDownSpeedMultiplier: 0.5
   slowDownEnergyConsumptionPerSecond: 30
