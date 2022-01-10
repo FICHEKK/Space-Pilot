@@ -6667,7 +6667,7 @@ GameObject:
   - component: {fileID: 1114460789}
   - component: {fileID: 1114865345}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: Exhaust Outlet Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6725,6 +6725,7 @@ MonoBehaviour:
   laserRenderer: {fileID: 1701104769}
   laserOrigin: {fileID: 1701104768}
   laserHitParticleSystem: {fileID: 6347373690564631390}
+  exhaustOutletParticleSystem: {fileID: 1114460789}
   forwardSpeed: 150
   maxHealth: 10000
   slowDownSpeedMultiplier: 0.5
@@ -6741,6 +6742,7 @@ MonoBehaviour:
   animationRotation: 30
   laserAudioSource: {fileID: 1701104770}
   laneChangeAudioSource: {fileID: 725493928}
+  exhaustOutletAudioSource: {fileID: 1128390165}
   laserShootKey: 32
   moveLeftKey: 97
   slowDownKey: 115

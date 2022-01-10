@@ -8,6 +8,7 @@ public class Spaceship : MonoBehaviour
     [SerializeField] private LineRenderer laserRenderer;
     [SerializeField] private Transform laserOrigin;
     [SerializeField] private GameObject laserHitParticleSystem;
+    [SerializeField] private ParticleSystem exhaustOutletParticleSystem;
 
     [Header("Spaceship settings")]
     [SerializeField] private float forwardSpeed = 100;
@@ -30,6 +31,7 @@ public class Spaceship : MonoBehaviour
     [Header("Audio settings")]
     [SerializeField] private AudioSource laserAudioSource;
     [SerializeField] private AudioSource laneChangeAudioSource;
+    [SerializeField] private AudioSource exhaustOutletAudioSource;
 
     [Header("Key bindings")]
     [SerializeField] private KeyCode laserShootKey = KeyCode.W;
@@ -69,13 +71,20 @@ public class Spaceship : MonoBehaviour
     private void MoveForward()
     {
         var speedMultiplier = 1f;
+        var startLifetime = 1.8f;
+        var volume = 0.1f;
 
         if (Input.GetKey(slowDownKey) && Energy > 0)
         {
             speedMultiplier = slowDownSpeedMultiplier;
+            startLifetime = 1f;
+            volume = 0.05f;
             ConsumeEnergy(slowDownEnergyConsumptionPerSecond);
         }
 
+        var mainModule = exhaustOutletParticleSystem.main;
+        mainModule.startLifetime = new ParticleSystem.MinMaxCurve(constant: startLifetime);
+        exhaustOutletAudioSource.volume = volume;
         transform.Translate(0, 0, forwardSpeed * speedMultiplier * Time.deltaTime);
     }
 
