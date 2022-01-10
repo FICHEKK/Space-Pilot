@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -9,7 +10,11 @@ public class StatisticsTracker : MonoBehaviour
     [SerializeField] private string statisticsFileName;
     [SerializeField] private Spaceship spaceship;
     [SerializeField] private TMP_Text highScoreText;
+    [SerializeField] private HighScoresTable highScoresTable;
     private Statistics _statistics;
+
+    public int HighScore => _statistics.highScore;
+    public List<int> AllScores => _statistics.allScores;
 
     private void Awake()
     {
@@ -22,6 +27,8 @@ public class StatisticsTracker : MonoBehaviour
 
             _statistics.highScore = Mathf.Max(score, _statistics.highScore);
             _statistics.allScores.Add(score);
+
+            highScoresTable.SetHighScores(_statistics.allScores.OrderByDescending(s => s).ToList());
         };
     }
 
