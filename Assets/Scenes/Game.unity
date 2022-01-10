@@ -6739,7 +6739,7 @@ MonoBehaviour:
   laserRaycastLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  animationTickCount: 30
+  animationTickCount: 15
   animationRotation: 30
   laserAudioSource: {fileID: 1701104770}
   laneChangeAudioSource: {fileID: 725493928}

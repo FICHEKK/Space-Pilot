@@ -13,9 +13,6 @@ public class StatisticsTracker : MonoBehaviour
     [SerializeField] private HighScoresTable highScoresTable;
     private Statistics _statistics;
 
-    public int HighScore => _statistics.highScore;
-    public List<int> AllScores => _statistics.allScores;
-
     private void Awake()
     {
         LoadStatistics();

@@ -40,6 +40,7 @@ public class Spaceship : MonoBehaviour
     [SerializeField] private KeyCode slowDownKey = KeyCode.S;
     [SerializeField] private KeyCode moveRightKey = KeyCode.D;
 
+    private static readonly WaitForFixedUpdate WaitForFixedUpdate = new WaitForFixedUpdate();
     private int _currentLaneIndex;
     private bool _isMovingToAnotherLane;
     private float _lastTimeEnergyWasConsumed;
@@ -129,7 +130,7 @@ public class Spaceship : MonoBehaviour
             currentPosition.x = Mathf.Lerp(startPositionX, endPositionX, EaseIntOutQuad(percentage));
             transform.position = currentPosition;
 
-            yield return null;
+            yield return WaitForFixedUpdate;
         }
 
         _currentLaneIndex = laneIndex;
