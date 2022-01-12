@@ -1,7 +1,7 @@
 # Space Pilot 🚀
 A fast paced action game where you need to dodge incoming asteroids. How long can you survive?
 
-![Gameplay](/Documentation/SpacePilot.gif)
+<img src="/Documentation/SpacePilot.gif" width="1024" />
 
 ## Controls and mechanics 🕹️
 ### Moving 🛧
@@ -22,3 +22,8 @@ Energy is a very useful resource that can help you in critical situations. Energ
 ### Health ❤️
 Your spaceship has fixed amount of health that cannot be replenished. Health is lost on every collision with an asteroid and amount of damage dealt is proportional to the size of the asteroid (tip: crash into smaller asteroids if collision is inevitable).
 Once your health reaches zero, your spaceship is destroyed - game over.
+
+## Challenge: Beat my high-score! 🏆
+Try to beat my own personal high-score of 33455 meters!
+
+<img src="/Documentation/HighScore.png" width="1024" />
