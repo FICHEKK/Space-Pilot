@@ -24,6 +24,6 @@ Your spaceship has fixed amount of health that cannot be replenished. Health is 
 Once your health reaches zero, your spaceship is destroyed - game over.
 
 ## Challenge: Beat my high-score! 🏆
-Try to beat my own personal high-score of 33455 meters!
+Try to beat my own personal high-score of 40983 meters!
 
-<img src="/Documentation/HighScore.png" width="1024" />
+<img src="/Documentation/HighScore2.png" width="1024" />
